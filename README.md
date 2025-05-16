@@ -1,112 +1,95 @@
-🔐 Garuda Secure Key Exchange & Messaging
-This project simulates a secure communication system using Diffie-Hellman Key Exchange for key agreement and AES-GCM for authenticated message encryption. It ensures confidentiality and integrity of messages exchanged between two parties — Alice and Bob.
+# 🔐 Garuda Key Exchange Secure Messaging
 
-📌 Project ID: Garuda Sentinel — Project 13
-📖 Concept
-Based on the chapter on Key Exchange and Authenticated Encryption from the book Serious Cryptography, this project demonstrates:
+**Project 13** under the **Garuda Sentinel** mission.  
+This project demonstrates a basic implementation of **secure message exchange** using:
 
-Secure shared secret derivation using Diffie-Hellman over an unsafe channel.
+- 🔑 **Diffie-Hellman Key Exchange** for establishing a shared secret between two parties.
+- 🔐 **AES Symmetric Encryption** (with the shared secret) for message confidentiality.
 
-Message encryption using AES in GCM (Galois/Counter Mode).
+---
 
-Message integrity using GCM's built-in authentication tag.
+## 🧠 Concept Overview
 
-🚀 Features
-Simulates Alice and Bob performing key exchange over an insecure channel.
+### 🎯 Goal:
+Enable two parties, **Alice (Sender)** and **Bob (Receiver)**, to securely exchange a message without directly sharing the encryption key.
 
-Encrypts messages using a shared secret derived from Diffie-Hellman.
+### 🔁 Workflow:
 
-Uses AES-GCM to provide both:
+1. **Key Exchange**:
+   - Alice and Bob each generate a **private key** and compute their **public key** using Diffie-Hellman.
+   - They exchange public keys (over insecure channels).
 
-Confidentiality (data is hidden from eavesdroppers),
+2. **Shared Secret Generation**:
+   - Both compute the same shared secret independently using their private key and the other's public key.
 
-Integrity (any tampering is detected).
+3. **Encryption**:
+   - Alice derives a symmetric key from the shared secret using SHA-256 and encrypts the message using AES.
+   - She sends the **ciphertext** and her **public key** to Bob.
 
-Provides clear hex outputs for ciphertext, nonce, and tag.
+4. **Decryption**:
+   - Bob derives the same symmetric key using the shared secret logic.
+   - He decrypts the ciphertext to recover the original message.
 
-🛠️ Technologies Used
-Python 3
+---
 
-secrets (for secure random generation)
+## 🚀 Files in This Project
 
-hashlib (for SHA-256 based key derivation)
+### 📁 `alice_send.py`
+- Generates Alice's keys
+- Simulates Bob’s public key (for testing)
+- Accepts a message input
+- Encrypts the message with AES (ECB mode for simplicity)
+- Prints:
+  - Ciphertext (hex)
+  - Alice’s public key
 
-pycryptodome (Crypto.Cipher.AES) for AES-GCM encryption
+### 📁 `bob_receive.py`
+- Generates Bob's private/public key pair
+- Accepts:
+  - Alice’s public key
+  - Encrypted message
+- Recalculates the shared secret
+- Decrypts and displays the original message
 
-💡 Install pycryptodome if not already installed:
+---
 
-bash
-Copy
-Edit
-pip install pycryptodome
-📂 Workflow
-1. Key Exchange Phase
-Public parameters: a large prime p and base g are used.
+## 📦 Requirements
 
-Both Alice and Bob generate private keys and compute public values.
+- Python 3.x
+- `pycryptodome` library:
+  ```bash
+  pip install pycryptodome
+🛡 Security Notes
+This is a learning-level simulation:
 
-They exchange public values and compute a shared secret.
+AES in ECB mode is not secure for real-world usage.
 
-A shared AES key is derived using SHA-256 of the shared secret.
+In production, use AES-GCM or AES-CBC with IV.
 
-2. Encryption Phase (Alice)
-Alice enters a message.
+For real systems:
 
-Message is encrypted using AES-GCM with the derived key.
+Use validated public key cryptography libraries.
 
-Outputs:
+Perform identity verification to prevent MITM attacks.
 
-Ciphertext
+Include MAC or AEAD modes for integrity.
 
-Nonce (12 bytes)
+🧭 Future Upgrades
+✅ Use AES-GCM for authenticated encryption.
 
-Authentication Tag (16 bytes)
+🔄 Implement asymmetric key exchange over network sockets.
 
-3. Decryption Phase (Bob)
-Bob receives the ciphertext, nonce, and tag.
+🛠 Add digital signatures for message integrity verification.
 
-He decrypts and verifies the message using his derived AES key.
+☁️ Extend for cloud message exchange with secure endpoints.
 
-If the tag matches, message is authentic. If not, tampering is detected.
+🔖 Project Metadata
+Mission: Garuda Sentinel
 
-✅ Example Output
-bash
-Copy
-Edit
-🔊 Alice: Enter a secret message to encrypt and send to Bob:
-> My secret launch code
+Project ID: 13
 
-📤 Message encrypted and sent to Bob:
-Ciphertext (hex): 14a7f25c...
-Nonce (hex):      a5cf2d4d...
-Tag (hex):        8a7e3110...
+Title: Key Exchange Secure Messaging
 
-📩 Bob received and decrypted the message:
-✅ Decrypted Message: My secret launch code
-✅ Integrity Verified: Message is authentic.
-🧠 Learning Outcome
-Understanding of how Diffie-Hellman enables secure key agreement.
+Focus: Diffie-Hellman Key Exchange, Symmetric Encryption
 
-Practical use of AES-GCM for modern authenticated encryption.
-
-Reinforces core principles from Serious Cryptography:
-
-Key exchange ≠ encryption
-
-Importance of tags in verifying message authenticity
-
-📦 Future Enhancements (Optional)
-Allow user-supplied primes and generators.
-
-Add network-based simulation (send encrypted messages over sockets).
-
-Integrate password-based Diffie-Hellman or ECDH.
-
-Web-based secure chat interface (real-time encrypted communication).
-
-📁 Files
-secure_messaging_dh_gcm.py — Full implementation in one script.
-
-🔰 Garuda Sentinel Vision
-This project is part of the Garuda Sentinel Mission to build secure-by-design cybersecurity tools and systems. It lays the foundation for encrypted, tamper-proof communications.
-
+Status: ✅ Completed
